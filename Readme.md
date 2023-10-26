@@ -441,7 +441,9 @@ spark-class org.apache.spark.deploy.worker.Worker spark://MasterIP:MasterPort --
 **Note** The password less access must exist between the master and all the workers (RPi, Local machine (localhost)). If you are getting permission or unable to bind errors in running the workers, check if you can do ```ssh localhost``` on your machine.
 
 13.Find the master url and port by looking at the master UI page on url:8080 (example: 172.20.10.14:8080). It should now show you a list of alive workers. An example screenshot is in the Assignment Sheet.
+
 14. For this assignment we are using hadoop to store the required files for all the cluster workers. Therefore, to help the clusters find the required files, upload the input file and use the url of the file as ```hdfs://masterIP:9000/path/to/inputfile``` same for creating and saving output on the hdfs
+
 15. While the Spark environment is running, use the following command to execute the Word count application on the cluster from the tasks folder (update your code and the command with the master IP and Port):
 ###### MacOS
 ```bash
