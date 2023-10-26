@@ -25,8 +25,9 @@ public class WordCount {
     }
 
     public static void main(String[] args) {
-        String textFilePath = "input/pigs.txt"; // update to HDFS url for task2
-        SparkConf conf = new SparkConf().setAppName("WordCountWithSpark").setMaster("local[*]"); // task2: update the setMaster with your cluster master URL for executing this code on the cluster
+        String textFilePath = "hdfs://172.20.10.5:9000/sparkApp/input/pigs.txt"; // update to HDFS url for task2
+        // task2: update the setMaster with your cluster master URL for executing this code on the cluster
+        SparkConf conf = new SparkConf().setAppName("WordCountWithSpark").setMaster("local");
         conf.set("spark.hadoop.validateOutputSpecs", "false");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
         JavaRDD<String> textFile = sparkContext.textFile(textFilePath);
@@ -55,7 +56,7 @@ public class WordCount {
         // save the output in the format word:count in output/output.txt
         // saveAsTextFile function is explained here:
         // https://www.tabnine.com/code/java/methods/org.apache.spark.api.java.JavaPairRDD/saveAsTextFile
-        counts.saveAsTextFile("output/output.txt");
+        counts.saveAsTextFile("hdfs://172.20.10.5:9000/sparkApp/input/output.txt");
 
         sparkContext.stop();
         sparkContext.close();
