@@ -25,22 +25,14 @@ public class WordCount {
     }
 
     public static void main(String[] args) {
-        String textFilePath = "hdfs://172.20.10.5:9000/sparkApp/input/pigs.txt"; // update to HDFS url for task2
+        String ip = "172.20.10.5";
+        String textFilePath = "hdfs://" + ip + ":9000/sparkApp/input/pigs.txt"; // update to HDFS url for task2
         // task2: update the setMaster with your cluster master URL for executing this code on the cluster
-        SparkConf conf = new SparkConf().setAppName("WordCountWithSpark").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("WordCountWithSpark").setMaster("spark://172.20.10.5:7077");
         conf.set("spark.hadoop.validateOutputSpecs", "false");
         JavaSparkContext sparkContext = new JavaSparkContext(conf);
         JavaRDD<String> textFile = sparkContext.textFile(textFilePath);
         JavaRDD<String> words = textFile.flatMap(new Filter());
-
-        /*
-         * add your code for key value mapping
-         *
-         * add your code to perform reduce on the given key value pairs
-         *
-         * print the word count and save the output in the format, e.g.,(in:15) to an 'output' folder (on HDFS for task 2)
-         * try to consolidate your output into single text file if you want to check your output against the given sample output
-         */
 
         // count how often each word appears
         // The first value of the tuple is the key, the second value is the value
@@ -56,7 +48,14 @@ public class WordCount {
         // save the output in the format word:count in output/output.txt
         // saveAsTextFile function is explained here:
         // https://www.tabnine.com/code/java/methods/org.apache.spark.api.java.JavaPairRDD/saveAsTextFile
-        counts.saveAsTextFile("hdfs://172.20.10.5:9000/sparkApp/input/output.txt");
+        counts.coalesce(1).saveAsTextFile("hdfs://" + ip + ":9000/sparkApp/input/output.txt");
+
+        // wait for 30 seconds before terminating the program for screenshot
+        // try {
+        //     Thread.sleep(30000);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
 
         sparkContext.stop();
         sparkContext.close();
